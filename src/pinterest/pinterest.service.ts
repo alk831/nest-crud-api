@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { PinterestBoardPins, PinterestPin, PinterestBoardPinsPayload } from './interfaces/pinterest.interface';
+import { PinterestPin, PinterestBoardPinsPayload } from './interfaces/pinterest.interface';
 import fetch from 'node-fetch';
-
-const pinFields = ['id', 'note', 'image', 'url', 'created_at', 'color', 'media'].join(',');
 
 @Injectable()
 export class PinterestService {
 
+  private readonly pinFields = ['id', 'note', 'image', 'url', 'created_at', 'color', 'media'].join(',');
+
   async getPinsForBoard(
     userName: string,
-    boardName: string
-  ): Promise<PinterestBoardPins> {
-    const response = await fetch(`https://api.pinterest.com/v1/boards/${userName}/${boardName}/pins/?fields=${pinFields}`, {
+    boardName: string,
+    cursor?: string
+  ): Promise<PinterestBoardPinsPayload> {
+    const cursorParam = cursor ? `&cursor=${cursor}` : '';
+
+    const response = await fetch(
+      `https://api.pinterest.com/v1/boards/${userName}/${boardName}/pins/?fields=${this.pinFields}${cursorParam}`, {
       headers: { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
     });
     const data: PinterestBoardPinsPayload = await response.json();
 
-    return data.data;
+    return data;
   }
 
   async getPinInfo(pinId: PinterestPin['id']): Promise<PinterestPin> {
-    const response = await fetch(`https://api.pinterest.com/v1/pins/${pinId}/?fields=${pinFields}`, {
+    const response = await fetch(`https://api.pinterest.com/v1/pins/${pinId}/?fields=${this.pinFields}`, {
       headers: { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
     });
     const data: { data: PinterestPin } = await response.json();

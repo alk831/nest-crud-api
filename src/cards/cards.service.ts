@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
 
 @Injectable()
 export class CardsService {
-  private readonly favoriteCards: Card[] = [];
+  private readonly favoriteCards: PinterestPin[] = [];
 
-  async addFavorite(card: Card) {
+  async addFavorite(card: PinterestPin) {
     this.favoriteCards.push(card);
     return card;
   }
 
-  async removeFavorite(cardId: Card['id']) {
+  async removeFavorite(cardId: PinterestPin['id']) {
     this.favoriteCards.filter(card => card.id !== cardId);
     return;
   }
@@ -18,14 +19,4 @@ export class CardsService {
     return this.favoriteCards;
   }
 
-}
-
-export interface Card {
-  id: number
-  title: string
-  author: {
-    id: number
-    name: string
-    avatar: string
-  }
 }

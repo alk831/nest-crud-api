@@ -7,3 +7,7 @@ export const CardSchema = new mongoose.Schema({
   authorName: String,
   authorAvatar: String
 });
+
+export const FavoriteCardSchema = new mongoose.Schema({
+  cardId: String
+});
