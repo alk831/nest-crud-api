@@ -1,9 +1,24 @@
-import { Controller, Get, Post, Delete, Param, Query, Body, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Param,
+  Query,
+  Body,
+  NotFoundException,
+  UseGuards
+} from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { PinterestService } from '../pinterest/pinterest.service';
 import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
+import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from '../auth/local.guard';
+import { UserData } from '../common/decorators';
+import { User } from '../models';
 
 @Controller('cards')
+@UseGuards(new LocalAuthGuard())
 export class CardsController {
   constructor(
     private readonly cardsService: CardsService,
@@ -11,7 +26,6 @@ export class CardsController {
   ) {}
 
   private readonly pinterestUser = 'usemuzli';
-  private readonly userId = 1; // mock
 
   @Get('popular')
   getPopularCards(
@@ -25,25 +39,31 @@ export class CardsController {
   }
 
   @Get('favorite')
-  getFavoriteCards() {
-    return this.cardsService.getFavorite(this.userId);
+  getFavoriteCards(
+    @UserData() user: User
+  ) {
+    return this.cardsService.getFavorite(user.id);
   }
 
   @Post('favorite')
   async saveCardAsFavorite(
-    @Body() body: PinterestPin
+    @Body() body: PinterestPin,
+    @UserData() user: User
   ) {
-    const likedCard = await this.cardsService.addFavorite(body, this.userId);
+    const likedCard = await this.cardsService.addFavorite(body, user.id);
     return likedCard;
   }
 
   @Delete('favorite/:id')
   async removeCardFromFavorite(
-    @Param('id') id: string 
+    @Param('id') id: string,
+    @UserData() user: User
   ) {
-    const hasBeenRemoved = await this.cardsService.removeFavorite(id, this.userId);
+    const hasBeenRemoved = await this.cardsService.removeFavorite(id, user.id);
     if (!hasBeenRemoved) {
-      throw new NotFoundException(`Card with id of ${id} is not saved as your favorite, or does not exists.`);
+      throw new NotFoundException(
+        `Card with id of ${id} is not saved as your favorite, or does not exists.`
+      );
     }
   }
 

@@ -4,16 +4,18 @@ import {
   UseGuards,
   Request,
   Body,
-  BadRequestException } from '@nestjs/common';
+  BadRequestException
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto';
+import { LocalAuthGuard } from './local.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(new LocalAuthGuard())
   @Post('login')
   async login(
     @Request() req
