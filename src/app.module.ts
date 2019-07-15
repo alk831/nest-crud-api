@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.MONGO_URL)],
+  imports: [MongooseModule.forRoot(process.env.MONGO_URL, { useNewUrlParser: true })],
   controllers: [AppController],
   providers: [AppService],
 })
