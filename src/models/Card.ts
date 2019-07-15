@@ -1,5 +1,5 @@
 import {
-  Model, Table, AllowNull, Column, PrimaryKey, Default
+  Model, Table, AllowNull, Column, PrimaryKey, Default, DataType
 } from 'sequelize-typescript';
 
 @Table({
@@ -9,7 +9,7 @@ import {
 export class Card extends Model<Card> {
 
   @PrimaryKey
-  @Column
+  @Column(DataType.BIGINT)
   id: number
 
   @AllowNull(false)
@@ -18,7 +18,7 @@ export class Card extends Model<Card> {
 
   @AllowNull(false)
   @Column
-  link: string
+  url: string
 
   @Column
   color: string | null
@@ -36,10 +36,14 @@ export class Card extends Model<Card> {
   imageHeight: number
 
   @AllowNull(false)
-  @Column
+  @Column(DataType.BIGINT)
   creatorId: number
 
   @Column
   creatorName: string
+
+  @AllowNull(false)
+  @Column
+  creatorUrl: string
   
 }

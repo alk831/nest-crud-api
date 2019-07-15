@@ -10,6 +10,8 @@ import * as bcrypt from 'bcrypt';
 })
 export class User extends Model<User> {
 
+  id: number
+
   @Unique
   @AllowNull(false)
   @IsEmail

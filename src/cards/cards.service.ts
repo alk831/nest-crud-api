@@ -1,27 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
-import { FavoriteCard, Card } from './schemas/card.schema';
+import { FavoriteCard, Card } from '../models';
 
 @Injectable()
 export class CardsService {
   private readonly favoriteCards: PinterestPin[] = [];
 
-  async addFavorite(card: PinterestPin, userId: number) {
-    const likedCard = await FavoriteCard.findOne({ cardId: card.id, userId }).exec();
+  async addFavorite(card: PinterestPin, userId: number): Promise<Card> {
+    const cardId = card.id;
+    const likedCard = await FavoriteCard
+      .findOne({
+        where: { cardId, userId },
+        include: [{ model: Card }]
+      });
 
     if (likedCard) {
-      return likedCard;
+      return likedCard.card;
     }
 
-    let exisitingCard = await Card.findById(card.id).exec();
+    let exisitingCard = await Card.findByPk(cardId);
 
     if (!exisitingCard) {
-      exisitingCard = await Card.create(card);
+      exisitingCard = await Card.create({
+        ...card,
+        creatorId: card.creator.id,
+        creatorName: card.creator.first_name,
+        creatorUrl: card.creator.url,
+        imageUrl: card.image.original.url,
+        imageWidth: card.image.original.width,
+        imageHeight: card.image.original.height,
+      });
     }
 
-    const newlyLikedCard = await FavoriteCard.create({ cardId: card.id, userId });
+    await FavoriteCard.create({ cardId, userId });
 
-    return newlyLikedCard;
+    return exisitingCard;
   }
 
   async removeFavorite(cardId: PinterestPin['id']) {

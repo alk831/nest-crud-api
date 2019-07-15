@@ -1,5 +1,5 @@
 import {
-  Model, Table, Column, PrimaryKey, BelongsTo, ForeignKey
+  Model, Table, Column, PrimaryKey, BelongsTo, ForeignKey, DataType
 } from 'sequelize-typescript';
 import { Card } from './Card';
 import { User } from './User';
@@ -10,12 +10,10 @@ import { User } from './User';
 })
 export class FavoriteCard extends Model<FavoriteCard> {
 
-  @PrimaryKey
-  @Column
   id: number
 
   @ForeignKey(() => Card)
-  @Column
+  @Column(DataType.BIGINT)
   cardId: number
   
   @ForeignKey(() => User)
