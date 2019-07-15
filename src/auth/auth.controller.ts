@@ -7,6 +7,7 @@ import {
   BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+import { RegisterDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,7 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() credentials
+    @Body() credentials: RegisterDto
   ) {
     const newUser = await this.authService.createUser(
       credentials.email,
