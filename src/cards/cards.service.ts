@@ -5,6 +5,16 @@ import { FavoriteCard, Card, User } from '../models';
 @Injectable()
 export class CardsService {
 
+  async getFavorite(userId: User['id']): Promise<Card[]> {
+    const favoriteCards = await FavoriteCard.findAll({
+      attributes: [],
+      where: { userId },
+      include: [{ model: Card }]
+    });
+    const cards = favoriteCards.map(({ card }) => card);
+    return cards;
+  }
+
   async addFavorite(card: PinterestPin, userId: User['id']): Promise<Card> {
     const cardId = card.id;
     const likedCard = await FavoriteCard

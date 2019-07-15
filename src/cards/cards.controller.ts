@@ -11,8 +11,7 @@ export class CardsController {
   ) {}
 
   private readonly pinterestUser = 'usemuzli';
-  // mock
-  private readonly userId = 1;
+  private readonly userId = 1; // mock
 
   @Get('popular')
   getPopularCards(
@@ -23,6 +22,11 @@ export class CardsController {
       'mobile-interactions-design-inspiration',
       query.cursor
     );
+  }
+
+  @Get('favorite')
+  getFavoriteCards() {
+    return this.cardsService.getFavorite(this.userId);
   }
 
   @Post('favorite')
