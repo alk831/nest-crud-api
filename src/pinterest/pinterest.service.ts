@@ -5,7 +5,7 @@ import fetch from 'node-fetch';
 @Injectable()
 export class PinterestService {
 
-  private readonly pinFields = ['id', 'note', 'image', 'url', 'created_at', 'color', 'media'].join(',');
+  private readonly pinFields = ['id', 'note', 'image', 'url', 'creator', 'created_at', 'color', 'media'].join(',');
 
   async getPinsForBoard(
     userName: string,
