@@ -1,0 +1,1 @@
+export type UserGroup = 'user' | 'moderator' | 'admin'; 

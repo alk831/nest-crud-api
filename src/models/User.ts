@@ -1,8 +1,17 @@
 import {
-  Model, Table, Unique, AllowNull, Column, IsEmail, BeforeCreate, Min
+  Model,
+  Table,
+  Unique,
+  AllowNull,
+  Column,
+  IsEmail,
+  BeforeCreate,
+  Min,
+  Default,
+  DataType
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
-
+import { UserGroup } from '../auth/interfaces';
 
 @Table({
   tableName: 'users',
@@ -22,6 +31,10 @@ export class User extends Model<User> {
   @Min(4)
   @Column
   password: string
+
+  @Default('user')
+  @Column(DataType.ENUM('user', 'moderator', 'admin'))
+  group: UserGroup
 
 
   @BeforeCreate
