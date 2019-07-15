@@ -2,6 +2,10 @@ import { PassportSerializer } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { User } from '../models';
 
+/**
+ * Cookie serializer.
+ * It saves user's id in a cookie, and uses it for database lookup while deserializing.
+ */
 @Injectable()
 export class LocalSerializer extends PassportSerializer {
 
@@ -14,10 +18,9 @@ export class LocalSerializer extends PassportSerializer {
     console.log('deserializeUser', { userId });
     const user = await User.findByPk(Number(userId));
     if (user) {
-      const { password, ...result } = user.toJSON();
-      done(null, result);
+      done(null, user.toJSON());
     } else {
-      done(new Error('User with this id does not exits'));
+      done(new Error('User with this id does not exists'));
     }
   }
   

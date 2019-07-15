@@ -12,13 +12,12 @@ import {
 import { CardsService } from './cards.service';
 import { PinterestService } from '../pinterest/pinterest.service';
 import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
-import { AuthGuard } from '@nestjs/passport';
-import { LocalAuthGuard } from '../auth/local.guard';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 
 @Controller('cards')
-@UseGuards(new LocalAuthGuard())
+@UseGuards(AuthenticatedGuard)
 export class CardsController {
   constructor(
     private readonly cardsService: CardsService,
