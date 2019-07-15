@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Param, Query, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Query, Body, NotFoundException } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { PinterestService } from '../pinterest/pinterest.service';
 import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
@@ -34,8 +34,13 @@ export class CardsController {
   }
 
   @Delete('favorite/:id')
-  removeCardFromFavorite() {
-    
+  async removeCardFromFavorite(
+    @Param('id') id: string 
+  ) {
+    const hasBeenRemoved = await this.cardsService.removeFavorite(id, this.userId);
+    if (!hasBeenRemoved) {
+      throw new NotFoundException(`Card with id of ${id} is not saved as your favorite, or does not exists.`);
+    }
   }
 
 }

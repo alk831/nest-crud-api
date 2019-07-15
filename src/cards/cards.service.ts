@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
-import { FavoriteCard, Card } from '../models';
+import { FavoriteCard, Card, User } from '../models';
 
 @Injectable()
 export class CardsService {
-  private readonly favoriteCards: PinterestPin[] = [];
 
-  async addFavorite(card: PinterestPin, userId: number): Promise<Card> {
+  async addFavorite(card: PinterestPin, userId: User['id']): Promise<Card> {
     const cardId = card.id;
     const likedCard = await FavoriteCard
       .findOne({
@@ -37,13 +36,11 @@ export class CardsService {
     return exisitingCard;
   }
 
-  async removeFavorite(cardId: PinterestPin['id']) {
-    this.favoriteCards.filter(card => card.id !== cardId);
-    return;
-  }
-
-  async getPopular() {
-    return this.favoriteCards;
+  async removeFavorite(cardId: PinterestPin['id'], userId: User['id']): Promise<boolean> {
+    const deletedCount = await FavoriteCard.destroy({
+      where: { cardId, userId }
+    });
+    return deletedCount >= 1;
   }
 
 }
