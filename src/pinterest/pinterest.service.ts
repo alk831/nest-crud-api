@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PinterestBoardPins, PinterestPin, PinterestBoardPinsPayload } from './interfaces/pinterest.interface';
+import fetch from 'node-fetch';
 
 const pinFields = ['id', 'note', 'image', 'url', 'created_at', 'color', 'media'].join(',');
 

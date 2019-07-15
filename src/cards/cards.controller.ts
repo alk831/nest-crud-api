@@ -1,23 +1,30 @@
 import { Controller, Get, Post, Delete, HttpCode, Param } from '@nestjs/common';
 import { CardsService } from './cards.service';
+import { PinterestService } from '../pinterest/pinterest.service';
 
-@Controller()
+@Controller('cards')
 export class CardsController {
-  constructor(private readonly cardsService: CardsService) {}
+  constructor(
+    private readonly cardsService: CardsService,
+    private readonly pinterestService: PinterestService
+  ) {}
 
-  @Get('/cards/popular')
+  @Get('popular')
   getPopularCards() {
-    return this.cardsService.getPopular();
+    return this.pinterestService.getPinsForBoard(
+      'usemuzli',
+      'mobile-interactions-design-inspiration'
+    );
   }
 
-  @Post('/favorite/:id')
+  @Post('favorite/:id')
   saveCardAsFavorite(
     @Param('id') id
   ) {
     // return this.cardsService.addFavorite(id)
   }
 
-  @Delete('/cards/favorite/:id')
+  @Delete('favorite/:id')
   removeCardFromFavorite() {
     
   }
