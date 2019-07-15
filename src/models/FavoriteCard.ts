@@ -5,11 +5,13 @@ import { Card } from './Card';
 import { User } from './User';
 
 @Table({
-  tableName: 'favorite_cards'
+  tableName: 'favorite_cards',
+  timestamps: true
 })
 export class FavoriteCard extends Model<FavoriteCard> {
 
   @PrimaryKey
+  @Column
   id: number
 
   @ForeignKey(() => Card)

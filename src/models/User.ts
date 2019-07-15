@@ -5,14 +5,15 @@ import * as bcrypt from 'bcrypt';
 
 
 @Table({
-  tableName: 'users'
+  tableName: 'users',
+  timestamps: true
 })
 export class User extends Model<User> {
 
   @Unique
   @AllowNull(false)
-  @Column
   @IsEmail
+  @Column
   email: string
 
   @AllowNull(false)

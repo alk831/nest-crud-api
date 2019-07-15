@@ -3,26 +3,28 @@ import {
 } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'cards'
+  tableName: 'cards',
+  timestamps: true
 })
 export class Card extends Model<Card> {
 
   @PrimaryKey
+  @Column
   id: number
 
-  @Column
   @AllowNull(false)
+  @Column
   note: string
 
-  @Column
   @AllowNull(false)
+  @Column
   link: string
 
   @Column
   color: string | null
 
-  @Column
   @AllowNull(false)
+  @Column
   imageUrl: string
 
   @Default(0)
@@ -33,8 +35,8 @@ export class Card extends Model<Card> {
   @Column
   imageHeight: number
 
-  @Column
   @AllowNull(false)
+  @Column
   creatorId: number
 
   @Column
