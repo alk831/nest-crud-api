@@ -38,10 +38,11 @@ export class CardsController {
   }
 
   @Get('favorite')
-  getFavoriteCards(
+  async getFavoriteCards(
     @UserData() user: User
   ) {
-    return this.cardsService.getFavorite(user.id);
+    const data = await this.cardsService.getFavorite(user.id);
+    return { data };
   }
 
   @Post('favorite')

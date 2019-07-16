@@ -13,6 +13,10 @@ async function bootstrap() {
   // await sequelize.sync({ force: true });
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    credentials: true,
+    origin: process.env.CORS_ORIGIN || 'http://localhost:8080'
+  });
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
   }));
