@@ -2,13 +2,14 @@ import {
   Controller,
   Post,
   UseGuards,
-  Request,
   Body,
   BadRequestException
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto';
 import { LoginGuard } from './guards/login.guard';
+import { UserData } from 'src/common/decorators';
+import { User } from 'src/models';
 
 @Controller('auth')
 export class AuthController {
@@ -17,19 +18,17 @@ export class AuthController {
   @UseGuards(LoginGuard)
   @Post('login')
   async login(
-    @Request() req
+    @UserData() user: User
   ) {
-    return req.user;
+    const { password, ...result } = user;
+    return result;
   }
 
   @Post('register')
   async register(
-    @Body() credentials: RegisterDto
+    @Body() { email, password }: RegisterDto
   ) {
-    const newUser = await this.authService.createUser(
-      credentials.email,
-      credentials.password
-    );
+    const newUser = await this.authService.createUser(email, password);
 
     if (!newUser) {
       throw new BadRequestException('This email is in use.');

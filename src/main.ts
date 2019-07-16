@@ -6,11 +6,16 @@ import { configureSequelize } from './config/sequelize';
 import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const sequelize = await configureSequelize();
   // await sequelize.sync({ force: true });
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true
+  }));
 
   app.use(session({
     secret: process.env.SESSION_SECRET
