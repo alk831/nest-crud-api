@@ -12,6 +12,7 @@ import {
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 import { UserGroup } from '../auth/interfaces';
+import { USER_GROUP } from 'src/common/consts';
 
 @Table({
   tableName: 'users',
@@ -33,13 +34,15 @@ export class User extends Model<User> {
   password: string
 
   @Default('user')
-  @Column(DataType.ENUM('user', 'moderator', 'admin'))
+  @Column(DataType.ENUM(...USER_GROUP))
   group: UserGroup
 
 
   @BeforeCreate
   static async hashPassword(user: User) {
-    const saltRounds = 2;
-    user.password = await bcrypt.hash(user.password, saltRounds);
+    if (user.password && user.password.length) {
+      const saltRounds = 2;
+      user.password = await bcrypt.hash(user.password, saltRounds);
+    }
   }
 }

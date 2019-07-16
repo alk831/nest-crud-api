@@ -1,0 +1,1 @@
+export const USER_GROUP = <const>['user', 'moderator', 'admin'];

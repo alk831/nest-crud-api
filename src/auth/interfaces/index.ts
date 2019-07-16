@@ -1,1 +1,3 @@
-export type UserGroup = 'user' | 'moderator' | 'admin'; 
+import { USER_GROUP } from '../../common/consts';
+
+export type UserGroup = typeof USER_GROUP[number];
