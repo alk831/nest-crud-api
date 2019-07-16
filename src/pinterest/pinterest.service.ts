@@ -5,8 +5,18 @@ import fetch from 'node-fetch';
 @Injectable()
 export class PinterestService {
 
-  private readonly pinFields = ['id', 'note', 'image', 'url', 'link', 'creator', 'created_at', 'color', 'media'].join(',');
+  private readonly host = 'https://api.pinterest.com/v1';
+  private readonly authHeader = { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
+  private readonly pinFields = [
+    'id', 'note', 'image', 'url', 'link', 'creator', 'created_at', 'color', 'media'
+  ].join(',');
 
+  /**
+   * Returns array of pins from user's board.
+   * @param userName Name of the user that we want to fetch from.
+   * @param boardName Name of the board that user owns.
+   * @param cursor URL that points to next page (pagination).
+   */
   async getPinsForBoard(
     userName: string,
     boardName: string,
@@ -15,17 +25,24 @@ export class PinterestService {
     const cursorParam = cursor ? `&cursor=${cursor}` : '';
 
     const response = await fetch(
-      `https://api.pinterest.com/v1/boards/${userName}/${boardName}/pins/?fields=${this.pinFields}${cursorParam}`, {
-      headers: { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
+      `${this.host}/boards/${userName}/${boardName}/pins/?fields=${this.pinFields}${cursorParam}`, {
+      headers: this.authHeader
     });
     const data: PinterestBoardPinsPayload = await response.json();
 
     return data;
   }
 
-  async getPinInfo(pinId: PinterestPin['id']): Promise<PinterestPin> {
-    const response = await fetch(`https://api.pinterest.com/v1/pins/${pinId}/?fields=${this.pinFields}`, {
-      headers: { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
+  /**
+   * Returns data about specific pin.
+   * @param pinId
+   * @returns `PinterestPin`
+   */
+  async getPinInfo(
+    pinId: PinterestPin['id']
+  ): Promise<PinterestPin> {
+    const response = await fetch(`${this.host}/pins/${pinId}/?fields=${this.pinFields}`, {
+      headers: this.authHeader
     });
     const data: { data: PinterestPin } = await response.json();
 

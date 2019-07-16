@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CardsController } from './cards.controller';
 import { CardsService } from './cards.service';
-import { PinterestService } from '../pinterest/pinterest.service';
-
+import { PinterestModule } from 'src/pinterest/pinterest.module';
 
 @Module({
+  imports: [PinterestModule],
   controllers: [CardsController],
-  providers: [CardsService, PinterestService]
+  providers: [CardsService]
 })
 export class CardsModule {};
