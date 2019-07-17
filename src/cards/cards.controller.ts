@@ -30,6 +30,34 @@ export class CardsController {
   getPopularCards(
     @Query() query: { cursor?: string }
   ) {
+    return {
+      data: [
+        {
+          id: "12123123129",
+          url: "https://dribbble.com/shots/6790895-Dashboard-DreamDom",
+          note: "App design",
+          imageUrl: "https://cdn.dribbble.com/users/1875714/screenshots/6794395/dribbble_-_3_2x.png",
+          creatorId: "1",
+          creatorUrl: "https://dribbble.com/outcrowd"
+        },
+        {
+          id: "121231231291",
+          url: "https://dribbble.com/shots/6790895-Dashboard-DreamDom",
+          note: "App design",
+          imageUrl: "https://cdn.dribbble.com/users/903897/screenshots/6794883/shot_2x.png",
+          creatorId: "1",
+          creatorUrl: "https://dribbble.com/outcrowd"
+        },
+        {
+          id: "1212312312912",
+          url: "https://dribbble.com/shots/6790895-Dashboard-DreamDom",
+          note: "App design",
+          imageUrl: "https://cdn.dribbble.com/users/1875714/screenshots/6794395/dribbble_-_3_2x.png",
+          creatorId: "1",
+          creatorUrl: "https://dribbble.com/outcrowd"
+        }
+      ]
+    }
     return this.pinterestService.getPinsForBoard(
       this.pinterestUser,
       'mobile-interactions-design-inspiration',

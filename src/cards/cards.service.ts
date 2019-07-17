@@ -30,15 +30,7 @@ export class CardsService {
     let exisitingCard = await Card.findByPk(cardId);
 
     if (!exisitingCard) {
-      exisitingCard = await Card.create({
-        ...card,
-        creatorId: card.creator.id,
-        creatorName: card.creator.first_name,
-        creatorUrl: card.creator.url,
-        imageUrl: card.image.original.url,
-        imageWidth: card.image.original.width,
-        imageHeight: card.image.original.height,
-      });
+      exisitingCard = await Card.create(card);
     }
 
     await FavoriteCard.create({ cardId, userId });

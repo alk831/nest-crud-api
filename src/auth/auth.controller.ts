@@ -9,9 +9,9 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto';
 import { LoginGuard } from './guards/login.guard';
-import { UserData } from 'src/common/decorators';
-import { User } from 'src/models';
-import { USER_GROUP } from 'src/common/consts';
+import { UserData } from '../common/decorators';
+import { User } from '../models';
+import { USER_GROUP } from '../common/consts';
 
 @Controller('auth')
 export class AuthController {
