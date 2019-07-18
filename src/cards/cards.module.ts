@@ -6,6 +6,7 @@ import { PinterestModule } from '../pinterest/pinterest.module';
 @Module({
   imports: [PinterestModule],
   controllers: [CardsController],
-  providers: [CardsService]
+  providers: [CardsService],
+  exports: [CardsService]
 })
 export class CardsModule {};

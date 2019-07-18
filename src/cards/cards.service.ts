@@ -58,7 +58,7 @@ export class CardsService {
 
   getPinsforMuzliBoard(
     category: CardCategory = 'mobile interaction',
-    cursor: string
+    cursor?: string
   ) {
     const boardName = this.muzliBoardNames[category];
     
