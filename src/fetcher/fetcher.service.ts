@@ -8,7 +8,7 @@ export class FetcherService {
   constructor(private readonly cardsService: CardsService) {}
 
   private saveFetchedCards(data) {
-    return fs.writeFile(__dirname + './', JSON.stringify(data));
+    return fs.writeFile(__dirname + './output.json', JSON.stringify(data));
   }
 
   async fetchAndSave(category: CardCategory) {
