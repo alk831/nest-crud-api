@@ -2,10 +2,14 @@ import {
   IsString,
   IsUrl,
   IsHexColor,
-  IsNumber
+  IsNumber,
+  IsIn,
+  IsOptional
 } from 'class-validator';
+import { CardCategory } from '../../common/types';
+import { CARD_CATEGORY } from '../../common/consts';
 
-export class CardDto {
+export class SaveCardAsFavoriteBody {
   @IsString()
   note: string
 
@@ -32,4 +36,14 @@ export class CardDto {
 
   @IsUrl()
   creatorUrl: string
+}
+
+export class GetPopularCardsParams {
+  @IsOptional()
+  @IsString()
+  cursor?: string
+
+  @IsOptional()
+  @IsIn(CARD_CATEGORY)
+  category?: CardCategory
 }
