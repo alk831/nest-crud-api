@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { PinterestService } from '../pinterest/pinterest.service';
-import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
+import { PinterestPin } from '../pinterest/interfaces/pinterest.interface';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';

@@ -1,6 +1,13 @@
 import {
-  Model, Table, AllowNull, Column, PrimaryKey, Default, DataType
+  Model,
+  Table,
+  AllowNull,
+  Column,
+  PrimaryKey,
+  Default,
+  DataType
 } from 'sequelize-typescript';
+import { CardCategory } from 'src/common/types';
 
 @Table({
   tableName: 'cards',
@@ -15,6 +22,15 @@ export class Card extends Model<Card> {
   @AllowNull(false)
   @Column
   note: string
+
+  @AllowNull(false)
+  @Column(DataType.ENUM(
+    'mobile interaction',
+    'mobile app',
+    'dashboard',
+    'logo'
+  ))
+  category: CardCategory
 
   @AllowNull(false)
   @Column

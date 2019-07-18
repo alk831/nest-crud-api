@@ -1,5 +1,10 @@
 import {
-  Model, Table, Column, PrimaryKey, BelongsTo, ForeignKey, DataType
+  Model,
+  Table,
+  Column,
+  BelongsTo,
+  ForeignKey,
+  DataType
 } from 'sequelize-typescript';
 import { Card } from './Card';
 import { User } from './User';

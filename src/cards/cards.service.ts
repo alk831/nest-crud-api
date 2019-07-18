@@ -1,9 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { PinterestPin } from 'src/pinterest/interfaces/pinterest.interface';
+import { PinterestPin } from '../pinterest/interfaces/pinterest.interface';
 import { FavoriteCard, Card, User } from '../models';
+import { CardCategory } from '../common/types';
+import { PinterestService } from '../pinterest/pinterest.service';
+import { MuzliBoardNames } from './interfaces';
 
 @Injectable()
 export class CardsService {
+  constructor(private readonly pinterestService: PinterestService) {}
+
+  private readonly muzliBoardNames: MuzliBoardNames = {
+    'mobile interaction': 'mobile-interactions-design-inspiration',
+    'dashboard': '350%2B-dashboard-ui-inspiration-2019',
+    'mobile app': 'mobile-app-designs',
+    'logo': 'logos'
+  }
 
   async getFavorite(userId: User['id']): Promise<Card[]> {
     const favoriteCards = await FavoriteCard.findAll({
@@ -43,6 +54,19 @@ export class CardsService {
       where: { cardId, userId }
     });
     return deletedCount >= 1;
+  }
+
+  getPinsforMuzliBoard(
+    category: CardCategory = 'mobile interaction',
+    cursor: string
+  ) {
+    const boardName = this.muzliBoardNames[category];
+    
+    return this.pinterestService.getPinsForBoard(
+      'usemuzli',
+      boardName,
+      cursor
+    );
   }
 
 }
