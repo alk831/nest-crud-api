@@ -7,7 +7,7 @@ import {
   HttpCode
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto';
+import { RegisterBody } from './dto';
 import { LoginGuard } from './guards/login.guard';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
@@ -32,7 +32,7 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() { email, password }: RegisterDto
+    @Body() { email, password }: RegisterBody
   ) {
     const newUser = await this.authService.createUser(email, password);
 

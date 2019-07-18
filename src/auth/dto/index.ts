@@ -4,7 +4,7 @@ import {
   IsAlphanumeric
 } from 'class-validator';
 
-export class RegisterDto {
+export class RegisterBody {
   @IsEmail({}, { message: 'Email is invalid' })
   email: string
 
