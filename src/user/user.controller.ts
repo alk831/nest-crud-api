@@ -3,14 +3,15 @@ import { Groups, UserData } from '../common/decorators';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { User } from '../models';
 
-@Controller('user')
+@Controller('users')
 @UseGuards(AuthenticatedGuard)
 export class UserController {
 
   @Get()
   @Groups('admin', 'moderator')
   async getAll() {
-    return await User.findAll();
+    const data = await User.getAllWithHiddenAttrs();
+    return { data };
   }
 
   @Patch()
