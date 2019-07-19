@@ -16,6 +16,7 @@ import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { GetPopularCardsParams } from './dto';
+import mockedCards from '../mock.json';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -29,6 +30,7 @@ export class CardsController {
   getPopularCards(
     @Query() { cursor, category = 'mobile interaction' }: GetPopularCardsParams
   ) {
+    return mockedCards;
     return this.cardsService.getPinsforMuzliBoard(
       category,
       cursor

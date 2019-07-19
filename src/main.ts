@@ -3,9 +3,9 @@ dotenv.config();
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configureSequelize } from './config/sequelize';
-import * as session from 'express-session';
-import * as cookieParser from 'cookie-parser';
-import * as passport from 'passport';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -20,9 +20,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
   }));
-
   app.use(session({
-    secret: process.env.SESSION_SECRET
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false 
   }));
   app.use(cookieParser());
   app.use(passport.initialize());
