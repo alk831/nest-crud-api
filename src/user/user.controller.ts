@@ -1,7 +1,17 @@
-import { Controller, Get, UseGuards, Patch, Delete, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Groups, UserData } from '../common/decorators';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { User } from '../models';
+import { UserUpdateBody } from './dto';
 
 @Controller('users')
 @UseGuards(AuthenticatedGuard)
@@ -14,7 +24,7 @@ export class UserController {
     return { data };
   }
 
-  @Patch()
+  @Patch('self')
   async updateSelf(
     @UserData() user: User,
     @Body() payload: any
@@ -24,20 +34,26 @@ export class UserController {
   }
   
   @Patch(':id')
-  @Groups('admin', 'moderator')
+  @Groups('admin')
   async update(
-    @Param() id: string,
-    @Body() payload: any
+    @Param('id') id: string,
+    @Body() payload: UserUpdateBody
   ) {
-    await User.update({ where: { id }}, payload);
+    await User.update(payload, { where: { id }});
   }
 
   @Delete(':id')
   @Groups('admin')
   async delete(
-    @Param() id: string
+    @Param('id') id: string,
+    @UserData() user: User
   ) {
-    return await User.destroy({ where: { id }});
+    if (user.id === Number(id)) {
+      throw new ForbiddenException(
+        'You cannot delete yourself'
+      );
+    }
+    await User.destroy({ where: { id }});
   }
 
 }

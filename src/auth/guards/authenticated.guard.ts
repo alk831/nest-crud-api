@@ -1,6 +1,6 @@
 import { CanActivate, Injectable, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserGroup } from '../interfaces';
+import { UserGroup } from '../../common/types';
 import { User } from '../../models';
 
 @Injectable()

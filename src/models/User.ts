@@ -9,7 +9,8 @@ import {
   Min,
   Default,
   DataType,
-  Scopes
+  Scopes,
+  Max
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 import { UserGroup } from '../common/types';
@@ -17,7 +18,7 @@ import { replaceAt } from '../common/utils';
 
 @Scopes({
   baseAttrs: () => ({
-    attributes: ['id', 'email', 'group']
+    attributes: ['id', 'email', 'group', 'points']
   }),
   withDates: () => ({
     attributes: ['createdAt', 'updatedAt']
@@ -47,9 +48,20 @@ export class User extends Model<User> {
   @Column(DataType.ENUM('user', 'moderator', 'admin'))
   group: UserGroup
 
+  @AllowNull(false)
+  @Default(0)
+  @Max(999)
+  @Column(DataType.SMALLINT.UNSIGNED)
+  points: number
+
   get hiddenEmail(): string {
     const email = this.getDataValue('email');
     const removeCharCount = 1;
+    
+    if (!email.length) {
+      return '';
+    }
+
     const [firstPart, secondPart] = email.split('@');
     
     const replacement = Array

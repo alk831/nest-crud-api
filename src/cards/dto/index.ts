@@ -44,6 +44,6 @@ export class GetPopularCardsParams {
   cursor?: string
 
   @IsOptional()
-  @IsIn(CARD_CATEGORY)
+  @IsIn([...CARD_CATEGORY])
   category?: CardCategory
 }
