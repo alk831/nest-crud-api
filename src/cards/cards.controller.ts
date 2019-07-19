@@ -16,7 +16,7 @@ import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { GetPopularCardsParams } from './dto';
-import mockedCards from '../mock.json';
+import mockedPins from '../mock.json';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -30,7 +30,17 @@ export class CardsController {
   getPopularCards(
     @Query() { cursor, category = 'mobile interaction' }: GetPopularCardsParams
   ) {
-    return mockedCards;
+    const data = mockedPins.data
+      .filter((pin, index, self) => {
+        return index <= 10;
+      })
+      .map(pin => 
+        this.cardsService.transformPinToCard(pin, category)
+      );
+    return {
+      page: mockedPins.page,
+      data
+    }
     return this.cardsService.getPinsforMuzliBoard(
       category,
       cursor

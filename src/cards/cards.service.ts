@@ -3,7 +3,7 @@ import { PinterestPin } from '../pinterest/interfaces/pinterest.interface';
 import { FavoriteCard, Card, User } from '../models';
 import { CardCategory } from '../common/types';
 import { PinterestService } from '../pinterest/pinterest.service';
-import { MuzliBoardNames } from './interfaces';
+import { MuzliBoardNames, CardFrame } from './interfaces';
 
 @Injectable()
 export class CardsService {
@@ -69,4 +69,21 @@ export class CardsService {
     );
   }
 
+  transformPinToCard(
+    pin: PinterestPin,
+    category: CardCategory
+  ): CardFrame {
+    const { creator, image, ...pinData } = pin;
+    return {
+      ...pinData,
+      id: Number(pinData.id),
+      category,
+      imageUrl: image.original.url,
+      imageWidth: image.original.width,
+      imageHeight: image.original.height,
+      creatorId: Number(creator.id),
+      creatorName: creator.first_name,
+      creatorUrl: creator.url
+    }
+  }
 }

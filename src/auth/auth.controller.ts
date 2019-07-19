@@ -25,8 +25,10 @@ export class AuthController {
   ) {
     const { password, ...data } = user;
     return {
-      groups: USER_GROUP,
-      data
+      data: {
+        user: data,
+        groups: USER_GROUP
+      }
     }
   }
 

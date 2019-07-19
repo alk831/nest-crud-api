@@ -8,7 +8,7 @@ export class PinterestService {
   private readonly host = 'https://api.pinterest.com/v1';
   private readonly authHeader = { Authorization: `Bearer ${process.env.PINTEREST_ACCESS_TOKEN}` }
   private readonly pinFields = [
-    'id', 'note', 'image', 'url', 'link', 'creator', 'created_at', 'color', 'media'
+    'id', 'note', 'image', 'url', 'link', 'creator', 'created_at', 'color'
   ].join(',');
 
   /**

@@ -6,7 +6,7 @@ export interface PinterestPin {
   link: string
   color: string | null
   url: string
-  creator?: {
+  creator: {
     id: string
     first_name: string
     last_name: string

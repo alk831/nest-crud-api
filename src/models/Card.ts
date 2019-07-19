@@ -7,7 +7,7 @@ import {
   Default,
   DataType
 } from 'sequelize-typescript';
-import { CardCategory } from 'src/common/types';
+import { CardCategory } from '../common/types';
 
 @Table({
   tableName: 'cards',
