@@ -1,2 +1,4 @@
+import { CARD_CATEGORY, USER_GROUP } from './consts';
 
-export type CardCategory = 'mobile interaction' | 'mobile app' | 'dashboard' | 'logo';
+export type CardCategory = typeof CARD_CATEGORY[number];
+export type UserGroup = typeof USER_GROUP[number];

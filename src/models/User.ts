@@ -11,7 +11,7 @@ import {
   DataType
 } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
-import { UserGroup } from '../auth/interfaces';
+import { UserGroup } from '../common/types';
 
 @Table({
   tableName: 'users',

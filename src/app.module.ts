@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CardsModule } from './cards/cards.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -14,7 +12,6 @@ import { FetcherModule } from './fetcher/fetcher.module';
     UserModule,
     FetcherModule
   ],
-  controllers: [AppController],
-  providers: [AppService, FetcherService],
+  providers: [FetcherService],
 })
 export class AppModule {}
