@@ -5,6 +5,7 @@ import { CardCategory } from '../common/types';
 import { PinterestService } from '../pinterest/pinterest.service';
 import { MuzliBoardNames, CardFrame } from './interfaces';
 import { SaveCardAsFavoriteBody } from './dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class CardsService {
@@ -15,6 +16,28 @@ export class CardsService {
     'dashboard': '350%2B-dashboard-ui-inspiration-2019',
     'mobile app': 'mobile-app-designs',
     'logo': 'logos'
+  }
+
+  async getPopular(userId: User['id']): Promise<Card[]> {
+    const favoriteCards = await this.getFavorites(userId);
+    const favoriteCardIds = favoriteCards.map(card => card.id);
+
+    if (!favoriteCardIds.length) {
+      return [];
+    }
+
+    const popularCards = await Card.findAll({
+      where: {
+        id: { [Op.notIn]: favoriteCardIds }
+      }
+    } as any);
+
+    const parsedCards = popularCards.map(card => ({
+      ...card.toJSON(),
+      id: card.id.toString()
+    }));
+
+    return parsedCards;
   }
 
   async getFavorites(userId: User['id']): Promise<Card[]> {
@@ -97,7 +120,7 @@ export class CardsService {
       imageUrl: image.original.url,
       imageWidth: image.original.width,
       imageHeight: image.original.height,
-      creatorId: (creator.id),
+      creatorId: creator.id,
       creatorName: creator.first_name,
       creatorUrl: creator.url
     }

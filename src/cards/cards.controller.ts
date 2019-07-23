@@ -17,7 +17,6 @@ import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { GetPopularCardsParams, SaveCardAsFavoriteBody } from './dto';
 import mockedPins from '../mock.json';
-import { CardFrame } from './interfaces';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -29,18 +28,13 @@ export class CardsController {
 
   @Get('popular')
   async getPopularCards(
+    @UserData() user: User,
     @Query() { cursor, category = 'mobile interaction' }: GetPopularCardsParams
   ) {
-    
-    const data = mockedPins.data
-      .filter((_, index) => index <= 10)
-      .map(pin => 
-        this.cardsService.transformPinToCard(pin, category)
-      );
-      
+    const popular = await this.cardsService.getPopular(user.id);
+
     return {
-      page: mockedPins.page,
-      data
+      data: popular
     }
   }
 
