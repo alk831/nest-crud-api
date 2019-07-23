@@ -4,6 +4,7 @@ import { FavoriteCard, Card, User } from '../models';
 import { CardCategory } from '../common/types';
 import { PinterestService } from '../pinterest/pinterest.service';
 import { MuzliBoardNames, CardFrame } from './interfaces';
+import { SaveCardAsFavoriteBody } from './dto';
 
 @Injectable()
 export class CardsService {
@@ -16,7 +17,7 @@ export class CardsService {
     'logo': 'logos'
   }
 
-  async getFavorite(userId: User['id']): Promise<Card[]> {
+  async getFavorites(userId: User['id']): Promise<Card[]> {
     const favoriteCards = await FavoriteCard.findAll({
       attributes: [],
       where: { userId },
@@ -26,16 +27,31 @@ export class CardsService {
     return cards;
   }
 
-  async addFavorite(card: PinterestPin, userId: User['id']): Promise<Card> {
-    const cardId = card.id;
-    const likedCard = await FavoriteCard
-      .findOne({
-        where: { cardId, userId },
-        include: [{ model: Card }]
-      });
+  async getFavorite(
+    cardId: Card['id'],
+    userId: User['id']
+  ): Promise<Card | null> {
+    const foundCard = await FavoriteCard.findOne({
+      where: { cardId, userId },
+      include: [{ model: Card }]
+    });
 
-    if (likedCard) {
-      return likedCard.card;
+    if (foundCard) {
+      return foundCard.card;
+    }
+
+    return null;
+  }
+
+  async addFavorite(
+    card: SaveCardAsFavoriteBody,
+    userId: User['id']
+  ): Promise<Card> {
+    const cardId = card.id;
+    const foundFavorite = await this.getFavorite(cardId, userId);
+
+    if (foundFavorite) {
+      return foundFavorite;
     }
 
     let exisitingCard = await Card.findByPk(cardId);
@@ -44,7 +60,7 @@ export class CardsService {
       exisitingCard = await Card.create(card);
     }
 
-    await FavoriteCard.create({ cardId, userId });
+    await FavoriteCard.create({ cardId: exisitingCard.id, userId });
 
     return exisitingCard;
   }
@@ -76,12 +92,12 @@ export class CardsService {
     const { creator, image, ...pinData } = pin;
     return {
       ...pinData,
-      id: Number(pinData.id),
+      id: pinData.id,
       category,
       imageUrl: image.original.url,
       imageWidth: image.original.width,
       imageHeight: image.original.height,
-      creatorId: Number(creator.id),
+      creatorId: (creator.id),
       creatorName: creator.first_name,
       creatorUrl: creator.url
     }

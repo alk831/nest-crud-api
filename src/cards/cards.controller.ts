@@ -15,8 +15,9 @@ import { PinterestPin } from '../pinterest/interfaces/pinterest.interface';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
-import { GetPopularCardsParams } from './dto';
+import { GetPopularCardsParams, SaveCardAsFavoriteBody } from './dto';
 import mockedPins from '../mock.json';
+import { CardFrame } from './interfaces';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -27,37 +28,33 @@ export class CardsController {
   ) {}
 
   @Get('popular')
-  getPopularCards(
+  async getPopularCards(
     @Query() { cursor, category = 'mobile interaction' }: GetPopularCardsParams
   ) {
+    
     const data = mockedPins.data
-      .filter((pin, index, self) => {
-        return index <= 10;
-      })
+      .filter((_, index) => index <= 10)
       .map(pin => 
         this.cardsService.transformPinToCard(pin, category)
       );
+      
     return {
       page: mockedPins.page,
       data
     }
-    return this.cardsService.getPinsforMuzliBoard(
-      category,
-      cursor
-    );
   }
 
   @Get('favorite')
   async getFavoriteCards(
     @UserData() user: User
   ) {
-    const data = await this.cardsService.getFavorite(user.id);
+    const data = await this.cardsService.getFavorites(user.id);
     return { data };
   }
 
   @Post('favorite')
   async saveCardAsFavorite(
-    @Body() body: PinterestPin,
+    @Body() body: SaveCardAsFavoriteBody,
     @UserData() user: User
   ) {
     const likedCard = await this.cardsService.addFavorite(body, user.id);

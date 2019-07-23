@@ -3,7 +3,7 @@ import { CardCategory } from '../../common/types';
 export type MuzliBoardNames = { [key in CardCategory]: string };
 
 export interface CardFrame {
-  id: number
+  id: number | string
   note: string
   category: CardCategory
   url: string
@@ -11,7 +11,7 @@ export interface CardFrame {
   imageUrl: string
   imageWidth: number
   imageHeight: number
-  creatorId: number
+  creatorId: number | string
   creatorName: string
   creatorUrl: string
 }

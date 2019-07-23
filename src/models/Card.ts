@@ -5,7 +5,8 @@ import {
   Column,
   PrimaryKey,
   Default,
-  DataType
+  DataType,
+  AutoIncrement
 } from 'sequelize-typescript';
 import { CardCategory } from '../common/types';
 
@@ -16,8 +17,9 @@ import { CardCategory } from '../common/types';
 export class Card extends Model<Card> {
 
   @PrimaryKey
+  @AutoIncrement
   @Column(DataType.BIGINT)
-  id: number
+  id: number | string
 
   @AllowNull(false)
   @Column
@@ -53,7 +55,7 @@ export class Card extends Model<Card> {
 
   @AllowNull(false)
   @Column(DataType.BIGINT)
-  creatorId: number
+  creatorId: number | string
 
   @Column
   creatorName: string

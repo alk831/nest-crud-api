@@ -4,12 +4,19 @@ import {
   IsHexColor,
   IsNumber,
   IsIn,
-  IsOptional
+  IsOptional,
+  IsNumberString,
 } from 'class-validator';
 import { CardCategory } from '../../common/types';
 import { CARD_CATEGORY } from '../../common/consts';
 
 export class SaveCardAsFavoriteBody {
+  @IsNumberString()
+  id: string
+
+  @IsString()
+  category: CardCategory
+
   @IsString()
   note: string
 
@@ -28,8 +35,8 @@ export class SaveCardAsFavoriteBody {
   @IsNumber()
   imageHeight: number
 
-  @IsNumber()
-  creatorId: number
+  @IsNumberString()
+  creatorId: string
 
   @IsString()
   creatorName: string
