@@ -16,6 +16,7 @@ import * as bcrypt from 'bcrypt';
 import { UserGroup } from '../common/types';
 import { replaceAt } from '../common/utils';
 import { FavoriteCard } from './FavoriteCard';
+import { Op } from 'sequelize';
 
 @Scopes({
   baseAttrs: () => ({
@@ -65,8 +66,8 @@ export class User extends Model<User> {
 
     const [firstPart, secondPart] = email.split('@');
 
-    if (firstPart.length === 2) {
-      return '**';
+    if (firstPart.length <= 2) {
+      return '**' + '@' + secondPart;
     }
     
     const replacement = Array
@@ -102,10 +103,10 @@ export class User extends Model<User> {
     const users = await User
       .scope('baseAttrs', 'withDates')
       .findAll({
-        where: { group: 'user' },
+        where: { [Op.not]: { group: 'admin' }},
         order: [['id', 'DESC']],
         limit: 20
-      });
+      } as any);
 
     const likedCardsCount = await Promise.all(
       users.map(user => 
