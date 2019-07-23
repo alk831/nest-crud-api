@@ -20,7 +20,7 @@ export class UserController {
   @Get()
   @Groups('admin', 'moderator')
   async getAll() {
-    const data = await User.getAllWithHiddenAttrs();
+    const data = await User.getUsersDetail();
     return { data };
   }
 

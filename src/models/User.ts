@@ -15,6 +15,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UserGroup } from '../common/types';
 import { replaceAt } from '../common/utils';
+import { FavoriteCard } from './FavoriteCard';
 
 @Scopes({
   baseAttrs: () => ({
@@ -63,6 +64,10 @@ export class User extends Model<User> {
     }
 
     const [firstPart, secondPart] = email.split('@');
+
+    if (firstPart.length === 2) {
+      return '**';
+    }
     
     const replacement = Array
       .from(
@@ -92,6 +97,30 @@ export class User extends Model<User> {
     }));
     return parsed;
   }
+
+  static async getUsersDetail(): Promise<GetUsersDetailResult> {
+    const users = await User
+      .scope('baseAttrs', 'withDates')
+      .findAll({
+        where: { group: 'user' },
+        order: [['id', 'DESC']],
+        limit: 20
+      });
+
+    const likedCardsCount = await Promise.all(
+      users.map(user => 
+        FavoriteCard.count({ where: { userId: user.id }})
+      )
+    );
+
+    const parsedUsers = users.map((user, index) => ({
+      ...user.toJSON(),
+      email: user.hiddenEmail,
+      cardsCount: likedCardsCount[index]
+    }));
+
+    return parsedUsers as any;
+  }
 }
 
 
@@ -100,3 +129,12 @@ type GetAllWithHiddenAttrsResult = {
   email: User['email']
   group: User['group']
 }[]
+
+type GetUsersDetailResult = {
+  id: User['id']
+  email: User['email']
+  group: User['group']
+  cardsCount: number
+  updatedAt: User['updatedAt']
+  createdAt: User['createdAt']
+}

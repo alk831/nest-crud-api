@@ -21,15 +21,17 @@ export class CardsService {
   async getPopular(userId: User['id']): Promise<Card[]> {
     const favoriteCards = await this.getFavorites(userId);
     const favoriteCardIds = favoriteCards.map(card => card.id);
+    let where;
 
-    if (!favoriteCardIds.length) {
-      return [];
+    if (favoriteCardIds.length) {
+      where = {
+        id: { [Op.notIn]: favoriteCardIds }
+      }
     }
 
     const popularCards = await Card.findAll({
-      where: {
-        id: { [Op.notIn]: favoriteCardIds }
-      }
+      where,
+      limit: 10
     } as any);
 
     const parsedCards = popularCards.map(card => ({
