@@ -16,7 +16,6 @@ import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { GetPopularCardsParams, SaveCardAsFavoriteBody } from './dto';
-import mockedPins from '../mock.json';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
