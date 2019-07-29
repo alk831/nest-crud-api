@@ -38,7 +38,8 @@
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3",
     "sequelize": "^5.10.1",
-    "sequelize-typescript": "^0.6.11"
+    "sequelize-typescript": "^0.6.11",
+    "ts-node": "^8.3.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",
@@ -59,7 +60,6 @@
     "prettier": "^1.15.3",
     "supertest": "^3.4.1",
     "ts-jest": "24.0.2",
-    "ts-node": "8.1.0",
     "tsconfig-paths": "3.8.0",
     "tslint": "5.16.0",
     "typescript": "3.4.3",
