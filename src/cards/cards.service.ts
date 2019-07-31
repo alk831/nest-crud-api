@@ -17,8 +17,8 @@ export class CardsService {
     'mobile app': 'mobile-app-designs',
     'logo': 'logos'
   }
-  private readonly cardsPageLimit = 8;
-
+  private readonly cardsPageLimit = 6;
+  
   private getOffset(page: number) {
     return Math.floor((page - 1) * this.cardsPageLimit);
   }
