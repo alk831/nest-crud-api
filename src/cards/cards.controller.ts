@@ -14,7 +14,7 @@ import { PinterestService } from '../pinterest/pinterest.service';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
-import { GetPopularCardsParams, SaveCardAsFavoriteBody, GetFavoriteCardsParams } from './dto';
+import { GetPopularCardsParams, SaveCardAsFavoriteBody, GetFavoriteCardsParams, FillPinsQuery } from './dto';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -78,4 +78,16 @@ export class CardsController {
     }
   }
 
+  @Post('pins')
+  async fillPins(
+    @Query() { cursor, category = 'mobile app' }: FillPinsQuery
+  ) {
+    const { data, page } = await this.cardsService.getPinsforMuzliBoard(
+      category, cursor
+    );
+    await this.cardsService.savePins(data, category);
+    return {
+      page
+    }
+  }
 }

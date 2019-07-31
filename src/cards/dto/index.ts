@@ -64,3 +64,13 @@ export class GetFavoriteCardsParams {
   @IsNumberString()
   page?: string
 }
+
+export class FillPinsQuery {
+  @IsOptional()
+  @IsString()
+  cursor?: string
+
+  @IsOptional()
+  @IsString()
+  category?: CardCategory
+}

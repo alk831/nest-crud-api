@@ -140,4 +140,11 @@ export class CardsService {
       creatorUrl: creator.url
     }
   }
+
+  async savePins(pins: PinterestPin[], category: CardCategory) {
+    const cardData = pins.map(pin => this.transformPinToCard(pin, category));
+    await Promise.all(
+      cardData.map(card => Card.create(card))
+    );
+  }
 }
