@@ -53,4 +53,14 @@ export class GetPopularCardsParams {
   @IsOptional()
   @IsIn([...CARD_CATEGORY])
   category?: CardCategory
+
+  @IsOptional()
+  @IsNumberString()
+  page?: string
+}
+
+export class GetFavoriteCardsParams {
+  @IsOptional()
+  @IsNumberString()
+  page?: string
 }

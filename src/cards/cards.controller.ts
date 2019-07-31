@@ -11,11 +11,10 @@ import {
 } from '@nestjs/common';
 import { CardsService } from './cards.service';
 import { PinterestService } from '../pinterest/pinterest.service';
-import { PinterestPin } from '../pinterest/interfaces/pinterest.interface';
 import { UserData } from '../common/decorators';
 import { User } from '../models';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
-import { GetPopularCardsParams, SaveCardAsFavoriteBody } from './dto';
+import { GetPopularCardsParams, SaveCardAsFavoriteBody, GetFavoriteCardsParams } from './dto';
 
 @Controller('cards')
 @UseGuards(AuthenticatedGuard)
@@ -28,21 +27,33 @@ export class CardsController {
   @Get('popular')
   async getPopularCards(
     @UserData() user: User,
-    @Query() { cursor, category = 'mobile interaction' }: GetPopularCardsParams
+    @Query() { category = 'mobile interaction', page = '1' }: GetPopularCardsParams
   ) {
-    const popular = await this.cardsService.getPopular(user.id);
-
+    const parsedPage = Number(page);
+    const popular = await this.cardsService.getPopular(user.id, parsedPage);
+    const cursor = `${process.env.HOST}/cards/favorite?page=${parsedPage + 1}`;
     return {
-      data: popular
+      data: popular,
+      count: popular.length,
+      page: parsedPage,
+      cursor
     }
   }
 
   @Get('favorite')
   async getFavoriteCards(
-    @UserData() user: User
+    @UserData() user: User,
+    @Query() { page = '1' }: GetFavoriteCardsParams
   ) {
-    const data = await this.cardsService.getFavorites(user.id);
-    return { data };
+    const parsedPage = Number(page);
+    const data = await this.cardsService.getFavorites(user.id, parsedPage);
+    const cursor = `${process.env.HOST}/cards/favorite?page=${parsedPage + 1}`;
+    return {
+      data,
+      count: data.length,
+      page: parsedPage,
+      cursor
+    }
   }
 
   @Post('favorite')

@@ -17,8 +17,20 @@ export class CardsService {
     'mobile app': 'mobile-app-designs',
     'logo': 'logos'
   }
+  private readonly cardsPageLimit = 8;
 
-  async getPopular(userId: User['id']): Promise<Card[]> {
+  private getOffset(page: number) {
+    return Math.floor((page - 1) * this.cardsPageLimit);
+  }
+
+  private getPaginationParams(page: number) {
+    return {
+      limit: this.cardsPageLimit,
+      offset: this.getOffset(page)
+    }
+  }
+
+  async getPopular(userId: User['id'], page: number): Promise<Card[]> {
     const favoriteCards = await this.getFavorites(userId);
     const favoriteCardIds = favoriteCards.map(card => card.id);
     let where;
@@ -31,8 +43,8 @@ export class CardsService {
 
     const popularCards = await Card.findAll({
       where,
-      limit: 10
-    } as any);
+      ...this.getPaginationParams(page)
+    });
 
     const parsedCards = popularCards.map(card => ({
       ...card.toJSON(),
@@ -42,11 +54,12 @@ export class CardsService {
     return parsedCards;
   }
 
-  async getFavorites(userId: User['id']): Promise<Card[]> {
+  async getFavorites(userId: User['id'], page?: number): Promise<Card[]> {
     const favoriteCards = await FavoriteCard.findAll({
       attributes: [],
       where: { userId },
-      include: [{ model: Card }]
+      include: [{ model: Card }],
+      ...page && this.getPaginationParams(page)
     });
     const cards = favoriteCards.map(({ card }) => card);
     return cards;
