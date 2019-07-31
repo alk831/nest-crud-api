@@ -9,8 +9,7 @@ import passport from 'passport';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const sequelize = await configureSequelize();
-  // await sequelize.sync({ force: true });
+  await configureSequelize();
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
